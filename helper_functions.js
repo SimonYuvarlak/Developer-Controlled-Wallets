@@ -5,7 +5,6 @@ const {
 } = require("@circle-fin/developer-controlled-wallets");
 require("dotenv").config();
 const forge = require("node-forge");
-const { create } = require("domain");
 
 // Setup developer sdk
 const circleDeveloperSdk = initiateDeveloperControlledWalletsClient({
@@ -64,13 +63,74 @@ const create_wallet = async () => {
   console.log(response.data.wallets);
 };
 
+// Get Wallets
 const get_wallets = async () => {
   try {
-    const response = await circleDeveloperSdk.getWallet({});
-    console.log(response);
+    const response = await circleDeveloperSdk.listWallets({});
+    console.log(response.data.wallets);
   } catch (error) {
     console.log("error:", error);
   }
+};
+
+// Get Specific Wallet
+const get_wallet = async () => {
+  try {
+    const response = await circleDeveloperSdk.getWallet({
+      id: `${process.env.WALLET_ID_1}`,
+    });
+    console.log(response.data);
+  } catch (error) {
+    console.log("error:", error);
+  }
+};
+
+// List wallet transactions
+const wallet_transactions = async () => {
+  const response = await circleDeveloperSdk.listTransactions({
+    walletIds: [`${process.env.WALLET_ID_1}`],
+  });
+
+  console.log("response: ", response.data);
+  console.log("amount: ", response.data.transactions[0].amounts);
+};
+
+// Get wallet balance
+const get_balance = async () => {
+  const response = await circleDeveloperSdk.getWalletTokenBalance({
+    id: `${process.env.WALLET_ID_1}`,
+  });
+
+  console.log("response: ", response.data);
+  console.log("Matic token id: ", response.data.tokenBalances[0].token.id);
+  console.log("USDC token id: ", response.data.tokenBalances[1].token.id);
+};
+
+// Transfer Token
+const transfer_token = async () => {
+  const response = await circleDeveloperSdk.createTransaction({
+    walletId: `${process.env.WALLET_ID_1}`,
+    tokenId: `${process.env.USDC_TOKEN_ID}`,
+    destinationAddress: `${process.env.WALLET_ADDRESS_2}`,
+    amounts: [".01"],
+    fee: {
+      type: "level",
+      config: {
+        feeLevel: "MEDIUM",
+      },
+    },
+  });
+
+  console.log("response: ", response.data);
+};
+
+// Check transafer state
+const check_transfer_state = async (id) => {
+  const response = await circleDeveloperSdk.getTransaction({
+    id: id,
+  });
+
+  console.log("response: ", response.data);
 };
 
 // Exports
@@ -80,4 +140,9 @@ module.exports = {
   create_wallet_set,
   create_wallet,
   get_wallets,
+  get_wallet,
+  wallet_transactions,
+  get_balance,
+  transfer_token,
+  check_transfer_state,
 };

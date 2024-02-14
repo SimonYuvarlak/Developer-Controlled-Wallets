@@ -21,7 +21,7 @@ WALLET_ID_1=
 WALLET_ID_2=
 WALLET_ADDRESS_1=
 WALLET_ADDRESS_2=
-USDC_TOKEN_ID=
+USDC_TOKEN_ID=7adb2b7d-c9cd-5164-b2d4-b73b088274dc
 
 Start with adding the API_KEY. 
 You will fill the rest once you have obtained the data from the Circle API.
@@ -55,7 +55,7 @@ npm run start
 // const secret = generate_secret();
 // console.log("secret: ", secret);
 
-// // Generate ciphertext
+// // // // Generate ciphertext
 // const ciphertext = generate_ciphertext(secret);
 
 // ! Do not forget to save the secret and the ciphertext in a secure place. !
@@ -246,7 +246,7 @@ npm run start
 // ----- Step 9 -----
 
 // Check transfer state
-// check_transfer_state(<id that you have obtained from the step 8>);
+// check_transfer_state("4b380ca3-4e0a-5648-8b45-0e95e1a809ec");
 
 // Should return:
 // response:  {

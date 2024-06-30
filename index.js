@@ -236,7 +236,7 @@ npm run start
 // ----- Step 8 -----
 
 // Transfer USDC
-// transfer_token();
+transfer_token();
 
 // Should return:
 // response:  { id: <some id>, state: 'INITIATED' }
@@ -246,7 +246,7 @@ npm run start
 // ----- Step 9 -----
 
 // Check transfer state
-// check_transfer_state("4b380ca3-4e0a-5648-8b45-0e95e1a809ec");
+// check_transfer_state("3d147102-d79f-55a6-97c3-a9b719bc1ab8");
 
 // Should return:
 // response:  {

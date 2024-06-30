@@ -55,7 +55,7 @@ const create_wallet_set = async () => {
 const create_wallet = async () => {
   const response = await circleDeveloperSdk.createWallets({
     accountType: "SCA",
-    blockchains: ["MATIC-MUMBAI"],
+    blockchains: ["MATIC-AMOY"],
     count: 2,
     walletSetId: `${process.env.WALLET_SET_ID}`,
   });
@@ -112,7 +112,7 @@ const transfer_token = async () => {
     walletId: `${process.env.WALLET_ID_1}`,
     tokenId: `${process.env.USDC_TOKEN_ID}`,
     destinationAddress: `${process.env.WALLET_ADDRESS_2}`,
-    amounts: [".01"],
+    amounts: ["1"],
     fee: {
       type: "level",
       config: {

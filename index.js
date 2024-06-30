@@ -61,6 +61,8 @@ const {
 // Save token id in the .env file
 
 // ----- Step 7 -----
+// Get wallet balance
+// get_balance();
 
 // ----- Step 8 -----
 

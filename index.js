@@ -88,7 +88,7 @@ const {
 
 // ----- Step 2 -----
 // Burn USDC
-burn_usdc();
+// burn_usdc();
 
 // ----- Step 3 -----
 // Get Attestation
@@ -96,4 +96,4 @@ burn_usdc();
 
 // ----- Step 4 -----
 // Mint USDC
-// mint_usdc();
+mint_usdc();

@@ -25,7 +25,7 @@ const approve_usdc = async () => {
     body: JSON.stringify({
       abiFunctionSignature: "approve(address,uint256)",
       abiParameters: [
-        "0x9f3B8679c73C2Fef8b59B4f3444d4e156fb70AA5",
+        `${process.env.TOKEN_MESSENGER_ADDRESS}`,
         "100000000",
       ],
       idempotencyKey: uuidv4(),
@@ -56,12 +56,12 @@ const burn_usdc = async () => {
     abiFunctionSignature: "depositForBurn(uint256,uint32,bytes32,address)",
     abiParameters: [
       "1000000",
-      "0",
+      "7",
       `${encodedDestinationAddress}`,
-      "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
+      `${process.env.CONTRACT_ADDRESS}`,
     ],
     idempotencyKey: uuidv4(),
-    contractAddress: "0x9f3B8679c73C2Fef8b59B4f3444d4e156fb70AA5",
+    contractAddress: `${process.env.TOKEN_MESSENGER_ADDRESS}`,
     feeLevel: "MEDIUM",
     walletId: `${process.env.CCTP_SENDER_WALLET_ID}`,
     entitySecretCiphertext: ciphertext,
@@ -108,32 +108,32 @@ const get_attestation = async () => {
   let transaction = await fetch_deposit_transaction();
   console.log("transaction", transaction);
 
-  // // 2 - Decoding and Creating messageBytes and messageHash with a Web3 Library
-  // // Get messageBytes from EVM logs using tx_hash of thetransaction.
-  // const transactionReceipt = await web3.eth.getTransactionReceipt(
-  //   transaction.txHash
-  // );
-  // const eventTopic = web3.utils.keccak256("MessageSent(bytes)");
-  // const log = transactionReceipt.logs.find((l) => l.topics[0] === eventTopic);
-  // const messageBytes = web3.eth.abi.decodeParameters(["bytes"], log.data)[0];
-  // const messageHash = web3.utils.keccak256(messageBytes);
+  // 2 - Decoding and Creating messageBytes and messageHash with a Web3 Library
+  // Get messageBytes from EVM logs using tx_hash of thetransaction.
+  const transactionReceipt = await web3.eth.getTransactionReceipt(
+    transaction.txHash
+  );
+  const eventTopic = web3.utils.keccak256("MessageSent(bytes)");
+  const log = transactionReceipt.logs.find((l) => l.topics[0] === eventTopic);
+  const messageBytes = web3.eth.abi.decodeParameters(["bytes"], log.data)[0];
+  const messageHash = web3.utils.keccak256(messageBytes);
 
-  // // 3 - Fetch Attestation Signature from Circle's Iris API
-  // // Get attestation signature from iris-api.circle.com
-  // let attestationResponse = { status: "pending" };
-  // while (attestationResponse.status != "complete") {
-  //   const response = await fetch(
-  //     `https://iris-api-sandbox.circle.com/attestations/${messageHash}`
-  //   );
-  //   attestationResponse = await response.json();
-  //   await new Promise((r) => setTimeout(r, 2000));
-  // }
-  // console.log("messageBytes: ", messageBytes);
-  // console.log("attestationResponse: ", attestationResponse);
-  // return {
-  //   messageBytes: messageBytes,
-  //   attestation: attestationResponse.attestation,
-  // };
+  // 3 - Fetch Attestation Signature from Circle's Iris API
+  // Get attestation signature from iris-api.circle.com
+  let attestationResponse = { status: "pending" };
+  while (attestationResponse.status != "complete") {
+    const response = await fetch(
+      `https://iris-api-sandbox.circle.com/attestations/${messageHash}`
+    );
+    attestationResponse = await response.json();
+    await new Promise((r) => setTimeout(r, 2000));
+  }
+  console.log("messageBytes: ", messageBytes);
+  console.log("attestationResponse: ", attestationResponse);
+  return {
+    messageBytes: messageBytes,
+    attestation: attestationResponse.attestation,
+  };
 };
 
 const mint_usdc = async () => {
